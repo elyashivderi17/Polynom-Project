@@ -186,4 +186,9 @@ public class Monom implements function{
 		else
 			throw new RuntimeException( "ERROR: Action is invalid");
 	}
+
+	public Monom copy() {
+		// TODO Auto-generated method stub
+		return this.copy();
+	}
 }
