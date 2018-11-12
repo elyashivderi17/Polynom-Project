@@ -5,7 +5,7 @@ package myMath;
  * see: https://en.wikipedia.org/wiki/Monomial 
  * The c lass implements function and support simple operations as: construction, value at x, derivative, add and multiply. 
  *@author Bar Genish
- *@author elyashiv deri 
+ *@author elyashiv deri
  */
 public class Monom implements function{
 	public Monom(double a, int b) {//defult constractor
@@ -24,12 +24,17 @@ public class Monom implements function{
 		}
 	}
 	public Monom(String str) throws Exception {//string constractor
+		str = str.replaceAll("X", "x");
 		if(str=="") 
 			throw new Exception("Monom must be from shape a*x^b");
-		str=str.toLowerCase();
-		this.set_coefficient(getCoef(str));
-		try {this.set_power(getPow(str));}
-		catch(Exception e) {System.out.println(e.getMessage());}
+		else if(str.matches("(?=.+)([+-]?[0-9]*[.]?[0-9]*(?:\\*?x?(?:\\^[0-9]+)?)?)*"))
+		{
+			str = str.replaceAll("\\*", "");
+			this.set_coefficient(getCoef(str));
+			try {this.set_power(getPow(str));}
+			catch(Exception e) {System.out.println(e.getMessage());}
+		}
+		else throw new Exception("Monom must be from shape a*x^b while b must be positive");
 	}
 	private double getCoef(String str) {//help functation that get string and calculate the coefficient
 		if(str.startsWith("x")) return 1;
@@ -37,10 +42,13 @@ public class Monom implements function{
 		else if(!str.contains("x")) return Double.parseDouble(str);
 		else return Double.parseDouble(str.split("x")[0]);
 	}
-	private int getPow(String str) {//help functation that get string and calculate the power
+	private int getPow(String str) throws Exception {//help functation that get string and calculate the power
 		if(!str.contains("x")) return 0;
 		else if(!str.contains("^")) return 1;
 		else return Integer.parseInt(str.split("\\^")[1]);
+		//int b=Integer.parseInt(str.split("x")[0]);
+		//if(b>=0 )return b;
+		//throw new Exception("the power must be positive");
 	}
 	public double get_coefficient() {//coefficient getter
 		return this._coefficient;
@@ -107,6 +115,14 @@ public class Monom implements function{
 		if(this._power<0) return "the power must be larger then 0";
 		if(this._coefficient==0)
 			return("0");
+		if(this._coefficient==1&&this._power==1)
+			return ("x");
+		if(this._coefficient==-1&&this._power==1)
+			return ("-x");
+		if(this._coefficient==1&&this._power>1)
+			return ("x^"+this._power);
+		if(this._coefficient==-1&&this._power>1)
+			return ("-x^"+this._power);
 		else if(this._power==1)
 			return(this._coefficient+"x");
 		else if(this._power==0)
@@ -118,15 +134,18 @@ public class Monom implements function{
 	/**
 	 * Compute a new monom which is the derivative of this monom
 	 * @return new monom I derivative
+	 * @throws Exception 
 	 */
-	public Monom derivative() {
+	public Monom derivative() throws Exception {
 		if(this._coefficient==1) {
 			this._power=0;
 			return new Monom(this._coefficient,0);
 		}
-		else {
+		else if(this._coefficient>1) {
 			this._coefficient*=this._power;
 			_power--;
+		}else {
+			throw new Exception("the power must be positive");
 		}
 		return new Monom(this._coefficient,this._power);
 	}
@@ -136,7 +155,8 @@ public class Monom implements function{
 	 * @return Multiply(Monom ot) 
 	 */
 	public Monom Multiply(Monom ot) {
-		try {
+		if(ot.get_coefficient()==0) return new Monom(0,this.get_power() );
+		else try {
 			return new Monom(this._coefficient*ot._coefficient , this._power+ot._power);
 		} catch (Exception e) {
 			e.getMessage();
@@ -154,6 +174,7 @@ public class Monom implements function{
 		if(b==this._power) {
 			this._coefficient+=a;
 		}
+		else if(a==0) return;
 		else {
 			throw new Exception("the power must be the same as the original monom");
 		}
@@ -168,6 +189,7 @@ public class Monom implements function{
 		if(m1.get_power()==this._power) {
 			this._coefficient+=m1.get_coefficient();
 		}
+		else if(m1.get_coefficient()==0) return;
 		else {
 			throw new Exception("the power must be the same as the original monom");
 		}
@@ -183,12 +205,8 @@ public class Monom implements function{
 			this._coefficient -=m.get_coefficient();
 			return new Monom(this.get_coefficient(),this.get_power() );
 		}
+		else if(m.get_coefficient()==0) return new Monom(this.get_coefficient(),this.get_power() );
 		else
 			throw new RuntimeException( "ERROR: Action is invalid");
-	}
-
-	public Monom copy() {
-		// TODO Auto-generated method stub
-		return this.copy();
 	}
 }

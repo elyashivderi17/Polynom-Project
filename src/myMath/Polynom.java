@@ -25,8 +25,14 @@ public class Polynom implements Polynom_able{
 			this.Polly=new ArrayList<Monom>(0);
 			str = str.replaceAll("\\-", "+-");
 			str = str.replaceAll("\\*", "");
+			if(str.charAt(0)=='+') {
+				str=str.substring(1);
+			}
 			for(String m :str.split("\\+")) Polly.add(new Monom(m));
 		}
+		else System.err.println("insert unvaild polynom");
+		Polly.sort(new Monom_Comperator());	
+		removeZeros();
 	}
 	/**
 	 *this function of type y=f(x), where both y and x are real numbers.
@@ -245,11 +251,12 @@ public class Polynom implements Polynom_able{
 		Iterator<Monom>runner=this.iteretor();
 		Polynom p1=new Polynom();
 		while(runner.hasNext()) {
-			Monom m=runner.next().derivative();
-			if(m.get_power()>0)
+			try {Monom m=runner.next().derivative();
+			if(m.get_power()>=0)
 				p1.add(m);
+		}catch (Exception e) {System.out.println(e.getMessage()); 
 		}
-
+		}
 		return p1;
 
 
@@ -262,6 +269,9 @@ public class Polynom implements Polynom_able{
 	@Override
 	public double area(double x0, double x1, double eps) {
 		double x = 0.0;
+		try{if(x0>x1)
+			throw new Exception("x0 nust be smaller than x1");
+		}catch (Exception e) {System.out.println(e.getMessage()); return Double.NaN;}
 		for(double i=x0;i<x1;i=i+eps)
 		{
 			if(f(i)<0)
