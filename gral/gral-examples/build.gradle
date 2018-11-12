@@ -1,0 +1,11 @@
+description = 'GRAL example applications'
+
+dependencies {
+	compile project(':gral-core')
+}
+
+jar {
+	manifest {
+		attributes('Main-Class': 'de.erichseifert.gral.examples.Browser')
+	}
+}
