@@ -1,6 +1,13 @@
 package myMath;
 
+
 import java.awt.Color;
+
+import java.util.Iterator;
+
+import java.util.LinkedList;
+
+
 
 import javax.swing.JFrame;
 
@@ -12,56 +19,120 @@ import de.erichseifert.gral.plots.lines.DefaultLineRenderer2D;
 
 import de.erichseifert.gral.plots.lines.LineRenderer;
 
+import de.erichseifert.gral.plots.points.DefaultPointRenderer2D;
+
 import de.erichseifert.gral.plots.points.PointRenderer;
 
 import de.erichseifert.gral.ui.InteractivePanel;
+
+import myMath.Polynom;
 
 
 
 public class Graph extends JFrame {
 
-	public Graph(Polynom p,double start, double end) {
+	private static final long serialVersionUID = 1L;
 
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
+	private Polynom poly;
 
-		setSize(600, 400);
+	private double starting_point;
 
+	private double to;
+
+	private double eps = 0.25;
+
+	
+
+	public Graph(Polynom _p, double x0, double x1, double _eps) {
+
+        poly= new Polynom(_p);
+
+        starting_point = x0;
+
+        to = x1;
+
+        eps = _eps;
+     
+        LinkedList<Double> Extreme_Points = poly.extremaPoints(x0, x1, eps);
+       
+        if (!Extreme_Points.isEmpty()) {
+
+        	System.out.println("Extreme points with a deviation of "+eps+" In the range of "+ starting_point+" to "+to+":");
+
+        	Iterator<Double> it = Extreme_Points.iterator();
+
+        	while (it.hasNext()) {
+
+        		double x = it.next();
+
+        		System.out.println("x = " + x +", y ="+ poly.f(x) );
+
+        	}
+
+        }
+
+        @SuppressWarnings("unchecked")
 		DataTable data = new DataTable(Double.class, Double.class);
 
-		for (double x = start; x <= end; x+=0.25) {
+        @SuppressWarnings("unchecked")
+		DataTable dataDer = new DataTable(Double.class, Double.class);
 
-			double y = p.f(x);
+        for (double x = starting_point; x <= to; x+=eps) {
 
-			data.add(x, y);
+        	double y = poly.f(x);
 
-		}
+        	if (Extreme_Points.contains(x)) 
 
-		XYPlot plot = new XYPlot(data);
+        		dataDer.add(x, y);
 
-		getContentPane().add(new InteractivePanel(plot));
+        	else 
 
-		LineRenderer lines = new DefaultLineRenderer2D();
+        		data.add(x, y);
 
-		plot.setLineRenderers(data, lines);
+        }
 
-		Color color = new Color(0.0f, 0.3f, 1.0f);
+    	setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-		plot.getPointRenderers(data);
+        setSize(500, 500);
+        
 
-		plot.getLineRenderers(data);
+        XYPlot plot = new XYPlot(data, dataDer);
 
-	}
+        getContentPane().add(new InteractivePanel(plot));
 
-	public static void main(String[] args) throws Exception {
+        LineRenderer lines = new DefaultLineRenderer2D();
 
-		Polynom p=new Polynom("x^2+3x");
+        plot.setLineRenderers(data, lines);
 
-		p.add(new Monom(2,1));
+        
 
-		Graph frame = new Graph(p,-2.0,6.0);
+        Color color = new Color(0f, 0f, 1f);
 
-		frame.setVisible(true);
+        Color colorDer = new Color(1f, 0f, 0f);
 
-	}
+        
+
+        
+
+        plot.getPointRenderers(data).get(0).setColor(color);
+
+        plot.getPointRenderers(dataDer).get(0).setColor(colorDer);
+
+        plot.getLineRenderers(data).get(0).setColor(color);
+    }
+
+
+
+    public static void main(String[] args) throws Exception {
+
+    	Polynom p = new Polynom("0.2x^4-1.5x^3+3.0x^2-x-5");
+    	   System.out.println("The Polynom is : "+p);
+           System.out.println();
+           System.out.println("The derivative is : "+p.derivative());
+           System.out.println();
+           
+    	p.GUI(-2, 6, 0.25);
+
+    }
 
 }

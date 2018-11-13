@@ -136,33 +136,62 @@ public class Monom implements function{
 	 * @return new monom I derivative
 	 * @throws Exception 
 	 */
-	public Monom derivative() throws Exception {
-		if(this._coefficient==1) {
-			this._power=0;
-			return new Monom(this._coefficient,0);
-		}
-		else if(this._coefficient>1) {
-			this._coefficient*=this._power;
-			_power--;
-		}else {
-			throw new Exception("the power must be positive");
-		}
-		return new Monom(this._coefficient,this._power);
+	public Monom derivative()
+
+	{
+
+		if (this._power == 0)
+
+			return new Monom(0,0);
+
+		return new Monom(this._coefficient*this._power,this._power-1);
+
 	}
 	/**
 	 * Multiply ot monom with my monom
 	 * @param ot the monom I multiply with my monom
 	 * @return Multiply(Monom ot) 
+	 * @throws Exception 
 	 */
-	public Monom Multiply(Monom ot) {
-		if(ot.get_coefficient()==0) return new Monom(0,this.get_power() );
-		else try {
-			return new Monom(this._coefficient*ot._coefficient , this._power+ot._power);
-		} catch (Exception e) {
-			e.getMessage();
+
+	public void Multiply(Monom M) 
+
+	{ 
+
+		if (this.isZero() || M.isZero()) //  If one of them is zero.
+
+		{
+
+			this.set_coefficient(0);
+
+			try {
+				this.set_power(0);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			return;
+
 		}
-		return null;
+
+		else 
+
+		{
+
+			this.set_coefficient(this._coefficient * M._coefficient);
+
+			try {
+				this.set_power(this._power + M._power);
+			} catch (Exception e) {
+				
+				e.printStackTrace();
+			}
+
+		}
+
 	}
+
 	/**
 	 * Add m1 to my monom
 	 * @param a real number that represent coefficient

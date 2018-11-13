@@ -2,7 +2,7 @@ package myMath;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-
+import java.util.LinkedList;
 import myMath.Monom;
 /**
  * This class represents a Polynom with add, multiply functionality, it also should support the following:
@@ -16,24 +16,47 @@ public class Polynom implements Polynom_able{
 	private ArrayList<Monom>Polly;
 
 	public Polynom() {//defult constractor
-		this.Polly=new ArrayList<Monom>(0);
+		this.Polly=new ArrayList<Monom>();
+		Polly.add(new Monom(0,0));
 	}
-	public Polynom(String str) throws Exception {//string constractor
-		str = str.replaceAll("X", "x");
-		if(str.matches("(?=.+)([+-]?[0-9]*[.]?[0-9]*(?:\\*?x?(?:\\^[0-9]+)?)?)*"))
-		{
-			this.Polly=new ArrayList<Monom>(0);
-			str = str.replaceAll("\\-", "+-");
-			str = str.replaceAll("\\*", "");
-			if(str.charAt(0)=='+') {
-				str=str.substring(1);
-			}
-			for(String m :str.split("\\+")) Polly.add(new Monom(m));
+
+	public Polynom(Polynom p) {
+		Polly = new ArrayList<Monom>();
+		Iterator<Monom> it = p.iteretor();
+		while(it.hasNext()) {
+			Monom a = new Monom(it.next());
+			add(a);
 		}
-		else System.err.println("insert unvaild polynom");
-		Polly.sort(new Monom_Comperator());	
-		removeZeros();
 	}
+	public Polynom(String str) throws Exception {
+
+		if (str.contains("^-"))
+			throw new RuntimeException("Error: Must be a positive number"); 
+
+		this.Polly=new ArrayList<Monom>();
+		if (str == "" || str == "0") 
+
+			Polly.add(new Monom(0,0));
+		
+		String str_1 = "";
+
+		for (int i=0; i< str.length(); i++){
+			if (str.charAt(i) == '+') {
+				this.add(new Monom(str_1));
+				str_1 = "";
+			}
+
+			else if (str.charAt(i) == '-') {
+				if (i!=0)
+					this.add(new Monom(str_1));
+				str_1 = "-";
+			}
+			else
+				str_1 += str.charAt(i); 
+		}
+		this.add(new Monom(str_1));
+	}
+
 	/**
 	 *this function of type y=f(x), where both y and x are real numbers.
 	 *@param x this is the value of x
@@ -142,24 +165,73 @@ public class Polynom implements Polynom_able{
 	/**
 	 * Multiply this Polynom by p1
 	 * @param p1 the polynom I multiply with my polynom
+	 * @throws Exception 
 	 */
 	@Override
-	public void multiply(Polynom_able p1) {
-		Iterator<Monom> runner=this.iteretor();
-		Polynom tmp=new Polynom();
-		while(runner.hasNext()) {
-			Monom run= (runner.next());
-			Iterator<Monom> runner2 = p1.iteretor();
-			while (runner2.hasNext())
-			{
-				tmp.add(runner2.next().Multiply(run));
+	public void multiply(Polynom_able p1) throws Exception {
+
+		if(!this.equals(p1)) {
+
+			Polynom copy = new Polynom(this);
+
+			this.Polly.clear();
+
+			this.Polly.add(new Monom(0,0));
+
+			Iterator<Monom> it = p1.iteretor();
+
+			while (it.hasNext()) {
+
+				Polynom p2 = new Polynom(copy);
+
+				//function for versatile calculation of Polynom * Monom
+				p2.multiply_Polynom_Monom(it.next()); 
+
+				this.add(p2);
 			}
+			
+		} else {
+
+			Polynom answer = new Polynom(new Polynom());
+
+			Iterator<Monom> it2 = this.iteretor();
+
+			while (it2.hasNext()) {
+				Polynom copy2 = new Polynom(this);
+
+				//function for versatile calculation of Polynom * Monom
+				copy2.multiply_Polynom_Monom(it2.next()); 
+				answer.add(copy2);
+			}
+
+			this.Polly.clear();
+
+			this.Polly.add(new Monom(0,0));
+
+			this.add(answer);
+
 		}
-		Polly=tmp.Polly;
-		Polly.sort(new Monom_Comperator());
-		removeZeros();
+
 	}
-	// TODO Auto-generated method stub
+	//New function for versatile calculation of Polynom * Monom
+	private void multiply_Polynom_Monom(Monom m1) throws Exception { 
+
+		if (m1.isZero()) {
+
+			Polly.clear();
+
+			Polly.add(new Monom(0,0));
+
+			return;
+		}
+
+		Iterator<Monom> it = this.iteretor();
+
+		while (it.hasNext())
+
+			it.next().Multiply(m1);
+
+	}
 
 	/**
 	 * Test if this Polynom is logically equals to p1.
@@ -254,13 +326,62 @@ public class Polynom implements Polynom_able{
 			try {Monom m=runner.next().derivative();
 			if(m.get_power()>=0)
 				p1.add(m);
-		}catch (Exception e) {System.out.println(e.getMessage()); 
-		}
+			}catch (Exception e) {System.out.println(e.getMessage()); 
+			}
 		}
 		return p1;
 
 
 	}
+
+	public void GUI(double x0, double x1, double eps) {
+
+		System.out.println("The total area on the X axis is: " );
+		System.out.println(area(x0, x1, eps));
+		System.out.println();
+		Graph frame = new Graph(this, x0, x1, eps);
+
+		frame.setVisible(true);
+
+	}
+
+
+
+	public LinkedList<Double> extremaPoints(double x0, double x1, double eps) {
+
+		LinkedList<Double> answer = new LinkedList<>();
+
+		if (x0 > x1)
+
+			return answer;
+
+		Polynom der = (Polynom)this.derivative();
+
+		double pointer = x0;
+
+		while (pointer <= x1) {
+
+			double changeDer = der.f(pointer)*der.f(pointer-eps); 
+
+			if (changeDer < 0 )
+
+				answer.add(pointer);
+
+			else if (changeDer == 0 && der.f(pointer)==0) //pointer is extreme point
+
+				answer.add(pointer);
+
+			pointer += eps;
+
+		}
+
+		return answer;
+
+	}
+
+
+
+
 	/**
 	 * Compute Riemann's Integral over this Polynom starting from x0, till x1 using eps size steps,
 	 * see: https://en.wikipedia.org/wiki/Riemann_integral
@@ -268,22 +389,33 @@ public class Polynom implements Polynom_able{
 	 */
 	@Override
 	public double area(double x0, double x1, double eps) {
-		double x = 0.0;
-		try{if(x0>x1)
-			throw new Exception("x0 nust be smaller than x1");
-		}catch (Exception e) {System.out.println(e.getMessage()); return Double.NaN;}
-		for(double i=x0;i<x1;i=i+eps)
-		{
-			if(f(i)<0)
-			{
 
-			}
-			else
-			{
-				x+=f(i)*eps;
-			}
+		if (x0 >= x1)
+
+			return 0;
+
+		if (eps <=0)
+
+			return 0;
+
+		double step = x0;
+
+		double sumArea = 0;
+
+		while (step + eps <= x1)
+
+		{
+
+			sumArea += Math.min(this.f(step),0) * eps; //Sum just the f(x) above the X axis
+
+			step += eps;
+
 		}
-		return x;
+
+		sumArea += Math.min(this.f(step),0) * (x1 - step); //Sum the last square, his width<eps
+
+		return -sumArea;
+
 	}
 	/**
 	 * @return an Iterator (of Monoms) over this Polynom
