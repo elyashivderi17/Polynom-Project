@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with GRAL.  If not, see <http://www.gnu.org/licenses/>.
  */
-/**
+/**/////
  * Main classes.
  */
 package de.erichseifert.gral;
