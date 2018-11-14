@@ -46,9 +46,6 @@ public class Monom implements function{
 		if(!str.contains("x")) return 0;
 		else if(!str.contains("^")) return 1;
 		else return Integer.parseInt(str.split("\\^")[1]);
-		//int b=Integer.parseInt(str.split("x")[0]);
-		//if(b>=0 )return b;
-		//throw new Exception("the power must be positive");
 	}
 	public double get_coefficient() {//coefficient getter
 		return this._coefficient;
