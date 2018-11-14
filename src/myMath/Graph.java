@@ -41,98 +41,98 @@ public class Graph extends JFrame {
 
 	private double eps = 0.25;
 
-	
+
 
 	public Graph(Polynom _p, double x0, double x1, double _eps) {
 
-        poly= new Polynom(_p);
+		poly= new Polynom(_p);
 
-        starting_point = x0;
+		starting_point = x0;
 
-        to = x1;
+		to = x1;
 
-        eps = _eps;
-     
-        LinkedList<Double> Extreme_Points = poly.extremaPoints(x0, x1, eps);
-       
-        if (!Extreme_Points.isEmpty()) {
+		eps = _eps;
 
-        	System.out.println("Extreme points with a deviation of "+eps+" In the range of "+ starting_point+" to "+to+":");
+		LinkedList<Double> Extreme_Points = poly.extremaPoints(x0, x1, eps);
 
-        	Iterator<Double> it = Extreme_Points.iterator();
+		if (!Extreme_Points.isEmpty()) {
 
-        	while (it.hasNext()) {
+			System.out.println("Extreme points with a deviation of "+eps+" In the range of "+ starting_point+" to "+to+":");
 
-        		double x = it.next();
+			Iterator<Double> it = Extreme_Points.iterator();
 
-        		System.out.println("x = " + x +", y ="+ poly.f(x) );
+			while (it.hasNext()) {
 
-        	}
+				double x = it.next();
 
-        }
+				System.out.println("x = " + x +", y ="+ poly.f(x) );
 
-        @SuppressWarnings("unchecked")
+			}
+
+		}
+
+		@SuppressWarnings("unchecked")
 		DataTable data = new DataTable(Double.class, Double.class);
 
-        @SuppressWarnings("unchecked")
+		@SuppressWarnings("unchecked")
 		DataTable dataDer = new DataTable(Double.class, Double.class);
 
-        for (double x = starting_point; x <= to; x+=eps) {
+		for (double x = starting_point; x <= to; x+=eps) {
 
-        	double y = poly.f(x);
+			double y = poly.f(x);
 
-        	if (Extreme_Points.contains(x)) 
+			if (Extreme_Points.contains(x)) 
 
-        		dataDer.add(x, y);
+				dataDer.add(x, y);
 
-        	else 
+			else 
 
-        		data.add(x, y);
+				data.add(x, y);
 
-        }
+		}
 
-    	setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-        setSize(500, 500);
-        
+		setSize(500, 500);
 
-        XYPlot plot = new XYPlot(data, dataDer);
 
-        getContentPane().add(new InteractivePanel(plot));
+		XYPlot plot = new XYPlot(data, dataDer);
 
-        LineRenderer lines = new DefaultLineRenderer2D();
+		getContentPane().add(new InteractivePanel(plot));
 
-        plot.setLineRenderers(data, lines);
+		LineRenderer lines = new DefaultLineRenderer2D();
 
-        
-
-        Color color = new Color(0f, 0f, 1f);
-
-        Color colorDer = new Color(1f, 0f, 0f);
-
-        
-
-        
-
-        plot.getPointRenderers(data).get(0).setColor(color);
-
-        plot.getPointRenderers(dataDer).get(0).setColor(colorDer);
-
-        plot.getLineRenderers(data).get(0).setColor(color);
-    }
+		plot.setLineRenderers(data, lines);
 
 
 
-    public static void main(String[] args) throws Exception {
+		Color color = new Color(0f, 0f, 1f);
 
-    	Polynom p = new Polynom("0.2x^4-1.5x^3+3.0x^2-x-5");
-    	   System.out.println("The Polynom is : "+p);
-           System.out.println();
-           System.out.println("The derivative is : "+p.derivative());
-           System.out.println();
-           
-    	p.GUI(-2, 6, 0.25);
+		Color colorDer = new Color(1f, 0f, 0f);
 
-    }
+
+
+
+
+		plot.getPointRenderers(data).get(0).setColor(color);
+
+		plot.getPointRenderers(dataDer).get(0).setColor(colorDer);
+
+		plot.getLineRenderers(data).get(0).setColor(color);
+	}
+
+
+
+	public static void main(String[] args) throws Exception {
+
+		Polynom p = new Polynom("0.2x^4-1.5x^3+3.0x^2-x-5");
+		System.out.println("The Polynom is : "+p);
+		System.out.println();
+		System.out.println("The derivative is : "+p.derivative());
+		System.out.println();
+
+		p.GUI(-2, 6, 0.0025);
+
+	}
 
 }
