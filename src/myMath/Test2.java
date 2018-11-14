@@ -3,10 +3,12 @@ package myMath;
 public class Test2 {
 	public static void main(String[] args) throws Exception {
 		// TODO Auto-generated method stub
-		System.out.println("We Are Testing now!!!");
-		System.out.println("First test for all Monom fuctions ");
-		System.out.println("Second test for all Polynom fuctions ");
-		Polynomtest();
+		//System.out.println("We Are Testing now!!!");
+		//System.out.println("First test for all Monom fuctions ");
+		//System.out.println("Second test for all Polynom fuctions ");
+		//Polynomtest();
+		Monom p=new Monom("");
+		System.out.println(p);
 	}
 	public static void Polynomtest() throws Exception {
 		Polynom p1=new Polynom("3x^2-4x+7");
