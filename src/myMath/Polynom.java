@@ -41,7 +41,6 @@ public class Polynom implements Polynom_able{
 		}
 		else System.err.println("insert unvaild polynom");
 		Polly.sort(new Monom_Comperator());	
-		//removeZeros();
 	}
 	/**
 	 *this function of type y=f(x), where both y and x are real numbers.
@@ -316,63 +315,31 @@ public class Polynom implements Polynom_able{
 		if(s.charAt(0)=='+')
 			s=s.substring(1);
 		s=s.replace("+-", "-");
-
 		return s;
 	}
 	public void GUI(double x0, double x1, double eps) {
-
 		System.out.println("The total area on the X axis is: " );
 		System.out.println(area(x0, x1, eps));
 		System.out.println();
 		Graph frame = new Graph(this, x0, x1, eps);
-
 		frame.setVisible(true);
-
 	}
-
-
 	public LinkedList<Double> extremaPoints(double x0, double x1, double eps) {
-
 		LinkedList<Double> answer = new LinkedList<>();
-
 		if (x0 > x1)
-
 			return answer;
-
 		Polynom der = (Polynom)this.derivative();
-
 		double pointer = x0;
-
 		while (pointer <= x1) {
-
 			double changeDer = der.f(pointer)*der.f(pointer-eps); 
-
 			if (changeDer < 0 )
-
 				answer.add(pointer);
-
 			else if (changeDer == 0 && der.f(pointer)==0) //pointer is extreme point
-
 				answer.add(pointer);
-
 			pointer += eps;
-
 		}
-
 		return answer;
-
 	}
-
-
 	// ********** add your code below ***********
-	//	private void removeZeros() {
-	//	Iterator <Monom> runner=this.iteretor();
-	//	for(Monom m : Polly) {
-	//		if(m.get_coefficient()==0) Polly.remove(m);
-	//		else if(m.equals("0")||m.equals("+0")||m.equals("-0")) Polly.remove(m);
-	//	}
-	//		if(Polly.isEmpty())
-	//		Polly.add(new Monom(0,0));
-	//}
 }
 
