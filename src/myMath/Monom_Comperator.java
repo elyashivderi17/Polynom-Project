@@ -11,7 +11,6 @@ public class Monom_Comperator implements Comparator<Monom> {
 		else if(o1.get_power()<o2.get_power()) {
 			return 1;
 		}
-
 		return 0;
 	}
 }
