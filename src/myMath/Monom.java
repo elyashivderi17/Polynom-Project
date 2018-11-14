@@ -136,62 +136,28 @@ public class Monom implements function{
 	 * @return new monom I derivative
 	 * @throws Exception 
 	 */
-	public Monom derivative()
-
-	{
-
-		if (this._power == 0)
-
+	public Monom derivative(){
+		//if(this._power==1) {
+		//this._power=0;
+		//return new Monom(this._coefficient,0);
+		//}
+		this._coefficient*=this._power;
+		_power--;
+		if(this._power<0)
 			return new Monom(0,0);
-
-		return new Monom(this._coefficient*this._power,this._power-1);
-
+		return new Monom(this._coefficient,this._power);
 	}
 	/**
 	 * Multiply ot monom with my monom
 	 * @param ot the monom I multiply with my monom
 	 * @return Multiply(Monom ot) 
-	 * @throws Exception 
 	 */
-
-	public void Multiply(Monom M) 
-
-	{ 
-
-		if (this.isZero() || M.isZero()) //  If one of them is zero.
-
-		{
-
-			this.set_coefficient(0);
-
-			try {
-				this.set_power(0);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-			return;
-
+	public Monom Multiply(Monom ot) {
+		if(ot.isZero()||this.isZero()) return new Monom(0,0 );
+		else {
+			return new Monom(this._coefficient*ot._coefficient , this._power+ot._power);
 		}
-
-		else 
-
-		{
-
-			this.set_coefficient(this._coefficient * M._coefficient);
-
-			try {
-				this.set_power(this._power + M._power);
-			} catch (Exception e) {
-				
-				e.printStackTrace();
-			}
-
-		}
-
 	}
-
 	/**
 	 * Add m1 to my monom
 	 * @param a real number that represent coefficient
@@ -235,7 +201,8 @@ public class Monom implements function{
 			return new Monom(this.get_coefficient(),this.get_power() );
 		}
 		else if(m.get_coefficient()==0) return new Monom(this.get_coefficient(),this.get_power() );
+		else if(this.isZero()) return new Monom(m._coefficient,m.get_power() );
 		else
-			throw new RuntimeException( "ERROR: Action is invalid");
+			throw new RuntimeException( "the power must be equals or the monom must be zero");
 	}
 }
