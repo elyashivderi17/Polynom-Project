@@ -13,8 +13,11 @@ polynom- shape arrays of monoms
 
 monoms class have some functions:
 1.add monoms with the same power(new one and exist one)
+
 2.calculate specific x (int and double x)
-3.derivative 
+
+3.derivative
+
 4.multiply two monoms
 5.check if two monoms are equals
 6. check if the monom is the zero monom
