@@ -1,7 +1,7 @@
 # Polynom-Project
 #### the tasks written by:
-#### Bar genish - 313174583
-#### elyashiv deri - 305368433
+#### Bar Genish - 313174583
+#### Elyashiv Deri - 305368433
 #### myMath
 we have 2 class in our projact:
 
