@@ -8,6 +8,7 @@ we have 2 class in our projact:
 Monom - shape a*x^b, where a real number and a is an integer(summed a none negative)
 polynom- shape arrays of monoms.
 
+
 #### MONOM CLASS:
 
 
@@ -47,6 +48,7 @@ we also have getteres and setters:
 1.power getter and setter.
 
 2.coefficient getter and setter.
+
 
 #### POLYNOM CLASS:
 
