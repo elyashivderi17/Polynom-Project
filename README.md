@@ -23,15 +23,15 @@ monoms class have some functions:
 
 5.check if two monoms are equals.
 
-6. check if the monom is the zero monom.
+6.check if the monom is the zero monom.
 
-7. substract between two monoms with the same power.
+7.substract between two monoms with the same power.
 
-7. getCoef - help functions that get string that represent monom and find his coefficient.
+7.getCoef - help functions that get string that represent monom and find his coefficient.
 
-8. getPower - help functions that get string that represent monom and find his power.
+8.getPower - help functions that get string that represent monom and find his power.
 
-9. to string - return a string of the monom.
+9.to string - return a string of the monom.
 
 
 the class have 3 constructor:
@@ -63,7 +63,7 @@ polynom class have some functions:
 
 1.add monom to our polynom.
 
-2. add polynom to our polynom.
+2.add polynom to our polynom.
 
 3.substract between two polynoms.
 
@@ -73,11 +73,11 @@ polynom class have some functions:
 
 6.check if two polynoms are equals.
 
-7. check if the polynom is the zero monom.
+7.check if the polynom is the zero monom.
 
-8. root-finds a root value of a polynom while given 2 values that 1 is positive and the other negative and eps which will make sure that we are eps close to the 0.
+8.root-finds a root value of a polynom while given 2 values that 1 is positive and the other negative and eps which will make sure that we are eps close to the 0.
 
-9. create a deep copy of this Polynum.
+9.create a deep copy of this Polynum.
 
 10.derivative of the polynom.
 
@@ -85,10 +85,10 @@ polynom class have some functions:
 
 12.Iterator (of Monoms) over this Polynom.
 
-13. calculate specific x to the polynom (int and double).
+13.calculate specific x to the polynom (int and double).
 
-14. to string - return a string of the Polynom.
+14.to string - return a string of the Polynom.
 
 15.Gui- func that get a poly and draw it in a new window.
 
-16. extremaPoints - help function that calculate the extreme points for the Gui and show than in red. 
+16.extremaPoints - help function that calculate the extreme points for the Gui and show than in red. 
