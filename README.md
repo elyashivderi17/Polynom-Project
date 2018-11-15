@@ -1,15 +1,15 @@
 # Polynom-Project
-the tasks written by:
-Bar genish - 313174583
-elyashiv deri - 305368433
-myMath
+#### the tasks written by:
+#### Bar genish - 313174583
+#### elyashiv deri - 305368433
+#### myMath
 we have 2 class in our projact:
 
 Monom - shape a*x^b, where a real number and a is an integer(summed a none negative)
 polynom- shape arrays of monoms
 
-monoms class:
-####
+#### monoms class:
+
 
 monoms class have some functions:
 1.add monoms with the same power(new one and exist one)
@@ -31,8 +31,8 @@ we also have getteres and setters
 1.power getter and setter
 2.coefficient getter and setter
 
-polynom class:
-####
+#### polynom class:
+
 
 the class have 3 constructor:
 1.defult constractor
