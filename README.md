@@ -9,7 +9,11 @@ Monom - shape a*x^b, where a real number and a is an integer(summed a none negat
 polynom- shape arrays of monoms.
 
 
+
+
 #### MONOM CLASS:
+
+
 
 
 monoms class have some functions:
@@ -50,7 +54,11 @@ we also have getteres and setters:
 2.coefficient getter and setter.
 
 
+
+
 #### POLYNOM CLASS:
+
+
 
 
 the class have 3 constructor:
