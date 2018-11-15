@@ -1,10 +1,11 @@
 package myMath;
 
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import myMath.Monom;
+
 /**
  * This class represents a Polynom with add, multiply functionality, it also should support the following:
  * 1. Riemann's Integral: https://en.wikipedia.org/wiki/Riemann_integral
@@ -17,8 +18,9 @@ public class Polynom implements Polynom_able{
 	private ArrayList<Monom>Polly;
 
 	public Polynom() {//defult constractor
-		this.Polly=new ArrayList<Monom>(0);
+		this.Polly=new ArrayList<Monom>();
 	}
+
 	public Polynom(Polynom p) {//copy constractor
 		Polly = new ArrayList<Monom>();
 		Iterator<Monom> it = p.iteretor();
@@ -41,6 +43,7 @@ public class Polynom implements Polynom_able{
 		}
 		else System.err.println("insert unvaild polynom");
 		Polly.sort(new Monom_Comperator());	
+
 	}
 	/**
 	 *this function of type y=f(x), where both y and x are real numbers.
@@ -83,7 +86,7 @@ public class Polynom implements Polynom_able{
 			this.add(runner.next());
 		}
 		Polly.sort(new Monom_Comperator());
-		//removeZeros();
+
 	}
 	/**
 	 * Add m1 to this Polynom
@@ -127,7 +130,6 @@ public class Polynom implements Polynom_able{
 		} 
 
 		Polly.sort(new Monom_Comperator());
-		//removeZeros();
 	}
 	/**
 	 * Subtract m from this Polynom
@@ -157,15 +159,13 @@ public class Polynom implements Polynom_able{
 		}
 		Polly=tmp.Polly;
 		Polly.sort(new Monom_Comperator());
-		//removeZeros();
 	}
-
 	/**
-	 * Test if this Polynom is logically equals to p1.
-	 * @param p1 Polynom I compre with my Polynom
-	 * @return true iff this pulynom represents the same function ans p1
+	 * Test if this our poly eqyals to p1 Polynom
+	 * @param p1 polynom that i compare with my poly
+	 * @return true/false if they equals
 	 */
-	@Override
+		@Override
 	public boolean equals(Polynom_able p1)
 	{	
 		Iterator<Monom>runner=this.iteretor();
@@ -255,9 +255,67 @@ public class Polynom implements Polynom_able{
 				p1.add(m);
 		}
 		return p1;
+	}
+	/**
+	 * The Gui function get a poly and draw it in a new window
+	 * @param x0 should be the lower value of the x's provided
+	 * @param x1 should be the higher value of the x's provided
+	 * @param eps is the threshold value to check if the x value is close to the correct answer
+	 */
+	public void GUI(double x0, double x1, double eps) {
 
+		System.out.println("The total area on the X axis is: " );
+		System.out.println(area(x0, x1, eps));
+		System.out.println();
+		Graph frame = new Graph(this, x0, x1, eps);
+
+		frame.setVisible(true);
 
 	}
+
+
+	/**
+	 * The extremaPoints is help function that calculate the extreme points for the Gui and show than in red
+	 * @param x0 should be the lower value of the x's provided
+	 * @param x1 should be the higher value of the x's provided
+	 * @param eps is the threshold value to check if the x value is close to the correct answer
+	 * @return new Linkedlist of points inclode the extreme points
+	 */
+	public LinkedList<Double> extremaPoints(double x0, double x1, double eps) {
+
+		LinkedList<Double> answer = new LinkedList<>();
+
+		if (x0 > x1)
+
+			return answer;
+
+		Polynom der = (Polynom)this.derivative();
+
+		double pointer = x0;
+
+		while (pointer <= x1) {
+
+			double changeDer = der.f(pointer)*der.f(pointer-eps); 
+
+			if (changeDer < 0 )
+
+				answer.add(pointer);
+
+			else if (changeDer == 0 && der.f(pointer)==0) //pointer is extreme point
+
+				answer.add(pointer);
+
+			pointer += eps;
+
+		}
+
+		return answer;
+
+	}
+
+
+
+
 	/**
 	 * Compute Riemann's Integral over this Polynom starting from x0, till x1 using eps size steps,
 	 * see: https://en.wikipedia.org/wiki/Riemann_integral
@@ -265,22 +323,19 @@ public class Polynom implements Polynom_able{
 	 */
 	@Override
 	public double area(double x0, double x1, double eps) {
-		double x = 0.0;
-		try{if(x0>x1)
-			throw new Exception("x0 nust be smaller than x1");
-		}catch (Exception e) {System.out.println(e.getMessage()); return Double.NaN;}
-		for(double i=x0;i<x1;i=i+eps)
+		if (x0 >= x1)
+			return 0;
+		if (eps <=0)
+			return 0;
+		double step = x0;
+		double sumArea = 0;
+		while (step + eps <= x1)
 		{
-			if(f(i)<0)
-			{
-
-			}
-			else
-			{
-				x+=f(i)*eps;
-			}
+			sumArea += Math.min(this.f(step),0) * eps; //Sum just the f(x) above the X axis
+			step += eps;
 		}
-		return x;
+		sumArea += Math.min(this.f(step),0) * (x1 - step); //Sum the last square, his width<eps
+		return -sumArea;
 	}
 	/**
 	 * @return an Iterator (of Monoms) over this Polynom
@@ -296,9 +351,6 @@ public class Polynom implements Polynom_able{
 	public String toString() {
 		String s ="";
 		Iterator <Monom> runner=this.iteretor();
-		//if(runner.hasNext()) {
-		//s=runner.next().toString();
-		//	}
 		while(runner.hasNext()) {
 			Monom m=runner.next();
 			if(!m.isZero()) {
@@ -315,31 +367,8 @@ public class Polynom implements Polynom_able{
 		if(s.charAt(0)=='+')
 			s=s.substring(1);
 		s=s.replace("+-", "-");
+
 		return s;
-	}
-	public void GUI(double x0, double x1, double eps) {
-		System.out.println("The total area on the X axis is: " );
-		System.out.println(area(x0, x1, eps));
-		System.out.println();
-		Graph frame = new Graph(this, x0, x1, eps);
-		frame.setVisible(true);
-	}
-	public LinkedList<Double> extremaPoints(double x0, double x1, double eps) {
-		LinkedList<Double> answer = new LinkedList<>();
-		if (x0 > x1)
-			return answer;
-		Polynom der = (Polynom)this.derivative();
-		double pointer = x0;
-		while (pointer <= x1) {
-			double changeDer = der.f(pointer)*der.f(pointer-eps); 
-			if (changeDer < 0 )
-				answer.add(pointer);
-			else if (changeDer == 0 && der.f(pointer)==0) //pointer is extreme point
-				answer.add(pointer);
-			pointer += eps;
-		}
-		return answer;
 	}
 	// ********** add your code below ***********
 }
-

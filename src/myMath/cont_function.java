@@ -1,5 +1,6 @@
 package myMath;
 
+
 /**
  * The interface represents a continuance function 
  * @author Bar Genish

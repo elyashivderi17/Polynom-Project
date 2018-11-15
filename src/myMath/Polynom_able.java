@@ -1,5 +1,6 @@
 package myMath;
 
+
 import java.util.Iterator;
 
 /**
@@ -27,7 +28,7 @@ public interface Polynom_able extends cont_function{
 	 * Multiply this Polynom by p1
 	 * @param p1 the polynom I multiply with my polynom
 	 */
-	public void multiply(Polynom_able p1);
+	public void multiply(Polynom_able p1) ;
 	/**
 	 * Test if this Polynom is logically equals to p1.
 	 * @param p1 Polynom I compre with my Polynom

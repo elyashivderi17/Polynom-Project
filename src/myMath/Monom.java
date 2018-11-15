@@ -1,5 +1,5 @@
-
 package myMath;
+
 /**
  * This class represents a simple "Monom" of shape a*x^b, where a is a real number and a is an integer (summed a none negative), 
  * see: https://en.wikipedia.org/wiki/Monomial 
@@ -25,9 +25,7 @@ public class Monom implements function{
 	}
 	public Monom(String str) throws Exception {//string constractor
 		str = str.replaceAll("X", "x");
-		if(str=="") 
-			throw new Exception("Monom must be from shape a*x^b");
-		else if(str.matches("(?=.+)([+-]?[0-9]*[.]?[0-9]*(?:\\*?x?(?:\\^[0-9]+)?)?)*"))
+		if(str.matches("(?=.+)([+-]?[0-9]*[.]?[0-9]*(?:\\*?x?(?:\\^[0-9]+)?)?)*"))
 		{
 			str = str.replaceAll("\\*", "");
 			this.set_coefficient(getCoef(str));
@@ -46,6 +44,9 @@ public class Monom implements function{
 		if(!str.contains("x")) return 0;
 		else if(!str.contains("^")) return 1;
 		else return Integer.parseInt(str.split("\\^")[1]);
+		//int b=Integer.parseInt(str.split("x")[0]);
+		//if(b>=0 )return b;
+		//throw new Exception("the power must be positive");
 	}
 	public double get_coefficient() {//coefficient getter
 		return this._coefficient;
@@ -131,30 +132,31 @@ public class Monom implements function{
 	/**
 	 * Compute a new monom which is the derivative of this monom
 	 * @return new monom I derivative
-	 * @throws Exception 
 	 */
-	public Monom derivative(){
-		//if(this._power==1) {
-		//this._power=0;
-		//return new Monom(this._coefficient,0);
-		//}
-		this._coefficient*=this._power;
-		_power--;
-		if(this._power<0)
+	public Monom derivative()
+
+	{
+
+		if (this._power == 0)
+
 			return new Monom(0,0);
-		return new Monom(this._coefficient,this._power);
+
+		return new Monom(this._coefficient*this._power,this._power-1);
+
 	}
 	/**
 	 * Multiply ot monom with my monom
 	 * @param ot the monom I multiply with my monom
 	 * @return Multiply(Monom ot) 
 	 */
+
 	public Monom Multiply(Monom ot) {
 		if(ot.isZero()||this.isZero()) return new Monom(0,0 );
 		else {
 			return new Monom(this._coefficient*ot._coefficient , this._power+ot._power);
 		}
 	}
+
 	/**
 	 * Add m1 to my monom
 	 * @param a real number that represent coefficient
